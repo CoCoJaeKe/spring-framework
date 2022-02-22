@@ -52,8 +52,14 @@ import org.springframework.util.Assert;
  */
 public class AnnotationConfigApplicationContext extends GenericApplicationContext implements AnnotationConfigRegistry {
 
+	/**
+	 * 注解的bean定义读取器
+	 */
 	private final AnnotatedBeanDefinitionReader reader;
 
+	/**
+	 * 类路径下的bean定义扫描器
+	 */
 	private final ClassPathBeanDefinitionScanner scanner;
 
 
@@ -61,8 +67,41 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * Create a new AnnotationConfigApplicationContext that needs to be populated
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
+	/**
+	 * this进来第一步调用无参构造函数 可用ctrl + alt + u查看继承关系
+	 * 调用子类的无惨构造函数会调用父类的无参构造函数 GenericApplicationContext
+	 */
 	public AnnotationConfigApplicationContext() {
+		/**
+		 * 初始化注解模式下的bean定义扫描器
+		 * 调用AnnotatedBeanDefinitionReader构造方法，传入的是this(AnnotationConfigApplicationContext)对象
+		 */
+		/**
+		 * 创建一个读取注解的bean定义读取器 目的：读取配置类
+		 * 什么事bean定义？ BeanDefinition
+		 *
+		 * 完成spring内部BeanDefinition的注册（主要是后置处理器）
+		 *
+		 *
+		 * 此步具体流程：
+		 * 		1：实例化了bean工厂
+		 * 		2：注册了很多创世纪的后置处理器（目的就是为了解析带有注解的bean:类似解析@Autowired等）注册bean定义，为了
+		 *     		AnnotationConfigApplicationContext后面的运行（无此类bean定义那么后面将无法运行）；
+		 *     	3：实例化了AnnotatedBeanDefinitionReader
+		 */
 		this.reader = new AnnotatedBeanDefinitionReader(this);
+		/**
+		 * 初始化我们的classPath类型的bean定义扫描器
+		 *
+		 * 创建BeanDefinition扫描器；目的用来扫描包或者类，继而转成bd(beandefinition bean定义)、
+		 * Spring默认的扫描宝不是这个scanner对象，而是自己new的一个classPathBeanDefinitionScanner
+		 * spring在执行工程后置处理器ConfigurationClassPostProcessor时，去扫描包时会自己new一个
+		 * 此处的scanner仅仅是为了程序员调用AnnotationConfigAplicationContext对象的scan方法
+		 *
+		 * 最终在invokeBeanFactoryPostProcessors
+		 * 解析@ComponentScan注解时，会new ClassPathBeanDefinitionScanner()并调用doscan方法
+		 *
+		 */
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 
@@ -83,6 +122,8 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * e.g. {@link Configuration @Configuration} classes
 	 */
 	public AnnotationConfigApplicationContext(Class<?>... annotatedClasses) {
+		// 调用构造函数
+		// 此处与beanFactory
 		this();
 		register(annotatedClasses);
 		refresh();

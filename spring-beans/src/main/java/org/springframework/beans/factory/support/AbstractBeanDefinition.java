@@ -137,6 +137,11 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	public static final String INFER_METHOD = "(inferred)";
 
 
+	/**
+	 * 用于保存bean组件的class对象
+	 * 假如是一个对象则为：cm.kw.User.java
+	 * 在实例化时候，可以直接通过当前beanClass反射得到当前实例
+	 */
 	@Nullable
 	private volatile Object beanClass;
 

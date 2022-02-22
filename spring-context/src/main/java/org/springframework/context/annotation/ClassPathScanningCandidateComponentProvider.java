@@ -94,22 +94,43 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 
 	private String resourcePattern = DEFAULT_RESOURCE_PATTERN;
 
+	/**
+	 * 满足过滤规则的
+	 */
 	private final List<TypeFilter> includeFilters = new LinkedList<>();
 
+	/**
+	 * 需要排除的
+	 */
 	private final List<TypeFilter> excludeFilters = new LinkedList<>();
 
+	/**
+	 * 环境信息
+	 */
 	@Nullable
 	private Environment environment;
 
+	/**
+	 * 条件信息 @Condition
+	 */
 	@Nullable
 	private ConditionEvaluator conditionEvaluator;
 
+	/**
+	 * 解析REsource
+	 */
 	@Nullable
 	private ResourcePatternResolver resourcePatternResolver;
 
+	/**
+	 * 用于解析资源信息对应的元数据
+	 */
 	@Nullable
 	private MetadataReaderFactory metadataReaderFactory;
 
+	/**
+	 * 解析@Index注解
+	 */
 	@Nullable
 	private CandidateComponentsIndex componentsIndex;
 
